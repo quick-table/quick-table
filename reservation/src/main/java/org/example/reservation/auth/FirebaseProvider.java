@@ -15,7 +15,7 @@ public class FirebaseProvider {
     public static void initialize() {
         try {
 
-            var file = ResourceUtils.getFile("classpath:firebase-private-key.json");
+            var file = ResourceUtils.getFile("classpath:firebase-private-key.secret.json");
 
             var options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(new FileInputStream(file)))

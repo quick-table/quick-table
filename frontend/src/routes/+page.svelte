@@ -49,8 +49,6 @@
 
 	import { onMount } from 'svelte';
 
-	onMount(async () => {});
-
 	const handleCreateButtonClick = async () => {
 		selectedTodo = {
 			Id: 0,

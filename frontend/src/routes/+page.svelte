@@ -1,4 +1,4 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import ManageTodo from '$lib/manage-todo.svelte';
 	import SearchBar, { type SearchEvent } from '$lib/search-bar.svelte';
 	import { useQuery, useMutation, useQueryClient } from '@sveltestack/svelte-query';
@@ -104,4 +104,4 @@
 </div>
 
 <style>
-</style> -->
+</style>

@@ -12,7 +12,7 @@
 
 		const idToken = await firebase.auth().currentUser?.getIdToken(true);
 
-		console.log('idToken', idToken);
+		console.log(idToken);
 	}
 
 	onMount(async () => {
@@ -38,7 +38,6 @@
 
 			callbacks: {
 				signInSuccessWithAuthResult(authResult, redirectUrl) {
-					console.log('signing resutl', authResult, redirectUrl);
 					// User successfully signed in.
 					// Return type determines whether we continue the redirect automatically
 					// or whether we leave that to developer to handle.

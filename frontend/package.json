@@ -41,6 +41,8 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltestack/svelte-query": "^1.6.0",
+		"firebase": "^10.8.1",
+		"firebaseui": "^6.1.0",
 		"website-breaker": "^1.0.3"
 	}
 }

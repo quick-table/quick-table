@@ -49,8 +49,4 @@
 	});
 </script>
 
-<QueryClientProvider client={queryClient}>
-	<div id="firebaseui-auth-container" />
-	<button on:click={GetIdToken}>Click me</button>
-	<slot />
-</QueryClientProvider>
+<slot />

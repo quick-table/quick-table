@@ -45,7 +45,7 @@ public class RestaurantController {
         return "This is not secured";
     }
 
-    @PostMapping(path="/restaurant") // Map ONLY POST Requests
+    @PostMapping(path="/restaurant") // Map ONLY     POST Requests
     public String addNewUser (@RequestBody Restaurant restaurant) {
         restaurantRepository.save(restaurant);
         return "You got it brother";

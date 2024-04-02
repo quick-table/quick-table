@@ -12,5 +12,4 @@ public class ReservationApplication {
         FirebaseProvider.initialize();
         SpringApplication.run(ReservationApplication.class, args);
     }
-
 }

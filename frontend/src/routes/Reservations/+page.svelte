@@ -5,6 +5,9 @@
 <main style="background-color: #bae8cb">
 	<NavBar />
 	<br>
-	<h1 class="h1 pt-20">This is the reservations page</h1>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<body>
+		<div class="min-h-screen bg-primary-300">
+			<h1 class="h1 font-bold mt-24 p-15 text-gray-950 align-middle origin-center text-center">QuickTable</h1>
+		</div>
+	</body>
 </main>

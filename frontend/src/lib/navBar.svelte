@@ -13,6 +13,7 @@
     nav{
         position:fixed;
         width: 100%;
+        z-index: 10;
     }
     .custom-button {
       /* Base styles */
@@ -24,5 +25,6 @@
       font-weight: 700;
       display: flex;
       justify-content: space-evenly;
+      z-index: 10;
     }
   </style>

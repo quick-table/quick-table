@@ -1,4 +1,7 @@
-package org.example.reservation.config;
+package org.example.reservation.auth;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class UserClaims {
     public static final String ROLE_USER = "ROLE_USER";
@@ -7,9 +10,9 @@ public class UserClaims {
 
     public static final String ROLE_RESTAURANT_OWNER = "ROLE_RESTAURANT_OWNER";
 
-    public static final String[] ALL_ROLES = {
+    public static final List<String> ALL_ROLES = Arrays.asList(
             ROLE_USER,
             ROLE_ADMIN,
             ROLE_RESTAURANT_OWNER
-    };
+    );
 }

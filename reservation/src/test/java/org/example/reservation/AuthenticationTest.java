@@ -3,7 +3,7 @@ package org.example.reservation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.example.reservation.auth.FirebaseProvider;
-import org.example.reservation.config.UserClaims;
+import org.example.reservation.auth.UserClaims;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

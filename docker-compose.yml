@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    container_name: mysql 
+    restart: always
+    image: mysql
+
+    ports:
+      - 3306:3306
+
+    environment:
+      MYSQL_DATABASE: reservation
+      MYSQL_USER: 'local'
+      MYSQL_PASS: 'pass'
+      MYSQL_ROOT_PASSWORD: 'root-pass'
+
+    volumes:
+      - ./.local/mysql-data:/var/lib/mysql
+
+
+  adminer:
+    container_name: mysql-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 6000:8080

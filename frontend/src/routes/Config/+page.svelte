@@ -6,7 +6,7 @@
 
 <main style="background-color: #bae8cb;">
     <div class="min-h-screen bg-primary-300 p-8">
-        <a href="/Search" class="btn variant-filled-secondary">Back to Reservations</a>
+        <a href="/Reservations" class="btn variant-filled-secondary">Back to Reservations</a>
         <div class="flex items-center mt-8">
             <div class="badge bg-primary-400 w-36 h-36 mr-4">
                 <img src="/favicon.png" alt="icon" class="w-full h-full">

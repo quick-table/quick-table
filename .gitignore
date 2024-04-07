@@ -1,7 +1,0 @@
-/.local
-
-.idea/
-
-*.secret.js
-*.secret.ts
-*.secret.json

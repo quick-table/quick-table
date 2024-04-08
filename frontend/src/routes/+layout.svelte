@@ -3,50 +3,22 @@
 	import '../app.css';
 
 	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
+	import LoggedOutNavbar from '$lib/navbar/logged-out-navbar.svelte';
 
 	// Create a client
 	const queryClient = new QueryClient();
+	import { page } from '$app/stores';
 
-	async function GetIdToken() {
-		const firebase = (await import('firebase/compat/app')).default;
+	let showNavBar = true;
 
-		const idToken = await firebase.auth().currentUser?.getIdToken(true);
+	$: {
+		const currentUrl = $page.route.id?.toLocaleLowerCase() ?? '';
 
-		console.log(idToken);
+		showNavBar = !(currentUrl.includes('login') || currentUrl.includes('signup'));
 	}
-
-	onMount(async () => {
-		const firebaseui = await import('firebaseui');
-		const firebase = (await import('firebase/compat/app')).default;
-		const firebaseInitializer = (await import('../lib/firebase')).initializeFirebase;
-
-		firebaseInitializer();
-
-		// Initialize the FirebaseUI Widget using Firebase.
-		var ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-		ui.start('#firebaseui-auth-container', {
-			signInSuccessUrl: '/',
-			signInOptions: [
-				{
-					provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-					signInMethod: firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD
-				}
-			],
-
-			signInFlow: 'popup',
-
-			callbacks: {
-				signInSuccessWithAuthResult(authResult, redirectUrl) {
-					// User successfully signed in.
-					// Return type determines whether we continue the redirect automatically
-					// or whether we leave that to developer to handle.
-					return true;
-				}
-			}
-			// Other config options...
-		});
-	});
 </script>
 
+{#if showNavBar}
+	<LoggedOutNavbar />
+{/if}
 <slot />

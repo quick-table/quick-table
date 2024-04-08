@@ -18,7 +18,9 @@
 	}
 </script>
 
-{#if showNavBar}
-	<LoggedOutNavbar />
-{/if}
-<slot />
+<QueryClientProvider client={queryClient}>
+	{#if showNavBar}
+		<LoggedOutNavbar />
+	{/if}
+	<slot />
+</QueryClientProvider>

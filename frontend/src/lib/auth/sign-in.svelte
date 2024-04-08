@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { initializeFirebase } from '$lib/firebase';
+	import { getFirebaseApp } from '$lib/firebase';
 	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 	import { onMount } from 'svelte';
 
-	// async function GetIdToken() {
-	// 	const firebase = (await import('firebase/compat/app')).default;
+	async function GetIdToken() {
+		const firebase = (await import('firebase/compat/app')).default;
 
-	// 	const idToken = await firebase.auth().currentUser?.getIdToken(true);
+		const idToken = await firebase.auth().currentUser?.getIdToken(true);
 
-	// 	console.log(idToken);
-	// }
+		console.log(idToken);
+	}
 
 	const userCredentials = {
 		email: '',
@@ -17,7 +17,7 @@
 	};
 
 	async function startPasswordSignIn() {
-		const app = await initializeFirebase();
+		const app = await getFirebaseApp();
 		const auth = getAuth(app);
 
 		var cred = await signInWithEmailAndPassword(
@@ -30,6 +30,7 @@
 
 		console.log(cred);
 	}
+
 </script>
 
 <form class="form max-w-lg flex flex-col gap-2">

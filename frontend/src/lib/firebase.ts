@@ -10,7 +10,13 @@ const firebaseConfig = {
 	measurementId: 'G-0RYD7RE8NF'
 };
 
-export function initializeFirebase() {
-	// Initialize Firebase
-	firebase.initializeApp(firebaseConfig);
+
+let firebaseApp: firebase.app.App | undefined = undefined;
+
+export function getFirebaseApp() {
+	if (firebaseApp === undefined){
+		firebaseApp = firebase.initializeApp(firebaseConfig);
+	}
+
+	return firebaseApp;
 }

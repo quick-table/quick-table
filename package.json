@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.2.0"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.29.0",
+    "svelte-routing": "^2.12.0"
   }
 }

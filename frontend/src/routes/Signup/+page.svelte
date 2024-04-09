@@ -50,6 +50,7 @@
 					name="signupEmail"
 					id="signupEmail"
 					class="input border-none rounded-md"
+					required
 					bind:value={userCredentials.email}
 				/>
 			</label>
@@ -61,6 +62,7 @@
 					name="password"
 					id="password"
 					class="input border-none rounded-md"
+					required
 					bind:value={userCredentials.password}
 				/>
 			</label>
@@ -71,6 +73,7 @@
 					type="password"
 					id="confirm-password"
 					class="input border-none rounded-md"
+					required
 					bind:value={userCredentials.passwordConfirmation}
 				/>
 			</label>

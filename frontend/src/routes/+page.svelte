@@ -1,10 +1,69 @@
+<script>
+	import { useMutation } from '@sveltestack/svelte-query';
+	import { navigate } from 'svelte-routing';
+
+	let nameFormData = { name: '' };
+	let timeFormData = { start: '', end: '' };
+
+	const [mutateName, { data: nameData, isLoading: isNameLoading, error: nameError }] = useMutation(nameFormData => fetchNameSearchResults(nameFormData));
+	const [mutateTime, { data: timeData, isLoading: isTimeLoading, error: timeError }] = useMutation(timeFormData => fetchTimeSearchResults(timeFormData));
+
+	async function fetchNameSearchResults(nameFormData) {
+		try {
+			const response = await fetch("/api/restaurants", {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(nameFormData)
+			});
+			const data = await response.json();
+
+			navigateToSearchPage(data);
+		}
+		catch (error) {
+			console.error('Error fetching search results:', error);
+		}
+	}
+
+	async function fetchTimeSearchResults(timeFormData) {
+		try {
+			const response = await fetch("/api/restaurants", {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(timeFormData)
+			});
+
+			const data = await response.json();
+
+			navigateToSearchPage(data);
+		}
+		catch (error) {
+			console.error('Error fetching search results:', error);
+		}
+	}
+
+	function handleNameSearch(event) {
+		event.preventDefault();
+		mutateName(nameFormData);
+	}
+
+	function handleTimeSearch(event) {
+		event.preventDefault();
+		mutateTime(timeFormData);
+	}
+
+	function navigateToSearchPage(results) {
+		navigate('/search', { state: { results: results } });
+	}
+  </script>
+
+
 <main style="">
 	<div class="my-20">
 		<h3 class="h3 font-bold mb-5 p-15 align-middle origin-center text-center">Welcome to</h3>
 		<h1 class="h1 font-bold mb-20 mt-5 p-15 align-middle origin-center text-center">QuickTable</h1>
 	</div>
 	<div class="flex min-h-screen flex-col items-center">
-		<form class="mb-2 mt-5">
+		<form class="mb-2 mt-5 on:submit={handleNameSearch}">
 			<label for="searchName" class="align-middle origin-center text-center mb-1"
 				>Search by Name</label
 			>
@@ -28,7 +87,7 @@
 
 		<h5 class="h5 font-bold align-middle origin-center text-center p-5">or</h5>
 
-		<form class="mt-2">
+		<form class="mt-2" on:submit={handleTimeSearch}>
 			<label for="searchTime" class="mb-4  align-middle origin-center text-center"
 				>Search by Time</label
 			>

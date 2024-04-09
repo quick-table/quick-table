@@ -1,4 +1,4 @@
-package org.example.reservation.config;
+package org.example.reservation.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,17 +1,30 @@
-package org.example.reservation.config;
+package org.example.reservation.auth;
+
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import com.google.firebase.auth.FirebaseToken;
+import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 
 public class FirebaseAuthentication implements Authentication {
+    @Getter
+    private final String userId;
+
     private final HashSet<GrantedAuthority> authorities = new HashSet<>();
 
-    FirebaseAuthentication(FirebaseToken token) {
+    public boolean isIn(String group) {
+        return authorities
+                .stream()
+                .anyMatch(x -> x.getAuthority().equals(group));
+    }
+
+    public FirebaseAuthentication(FirebaseToken token) {
+        this.userId = token.getClaims().get("sub").toString();
+
         var claimMaybes = token.getClaims().get("custom_claims");
 
         if (!(claimMaybes instanceof ArrayList<?> claims)) {

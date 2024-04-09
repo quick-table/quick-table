@@ -174,6 +174,7 @@ export interface Restaurant {
 	name?: string;
 	email?: string;
 	owner?: User;
+	logoUrl?: string;
 	/** @uniqueItems true */
 	restaurants?: RestaurantTable[];
 	/** @uniqueItems true */
@@ -455,6 +456,22 @@ export interface ResponseWrapperListReservation {
 		| '511 NETWORK_AUTHENTICATION_REQUIRED';
 }
 
+export type UpdateUserPermissionsData = ResponseWrapperListString;
+
+export type CreateNewUserData = ResponseWrapperUser;
+
+export type SearchAvailableRestaurantData = ResponseWrapperListRestaurant;
+
+export type SearchRestaurantData = ResponseWrapperListRestaurant;
+
+export type CreateReservationData = ResponseWrapperReservation;
+
+export type CancelReservationData = ResponseWrapperReservation;
+
+export type GetReservationData = ResponseWrapperListReservation;
+
+export type HealthCheckData = string;
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
@@ -692,7 +709,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request PUT:/api/users/{id}/roles
 		 */
 		updateUserPermissions: (id: string, data: string[], params: RequestParams = {}) =>
-			this.request<ResponseWrapperListString, any>({
+			this.request<UpdateUserPermissionsData, any>({
 				path: `/api/users/${id}/roles`,
 				method: 'PUT',
 				body: data,
@@ -708,7 +725,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/users
 		 */
 		createNewUser: (params: RequestParams = {}) =>
-			this.request<ResponseWrapperUser, any>({
+			this.request<CreateNewUserData, any>({
 				path: `/api/users`,
 				method: 'POST',
 				...params
@@ -722,7 +739,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/restaurants/time-slot/query
 		 */
 		searchAvailableRestaurant: (data: SearchTimeSlotDto, params: RequestParams = {}) =>
-			this.request<ResponseWrapperListRestaurant, any>({
+			this.request<SearchAvailableRestaurantData, any>({
 				path: `/api/restaurants/time-slot/query`,
 				method: 'POST',
 				body: data,
@@ -738,7 +755,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/restaurants/query
 		 */
 		searchRestaurant: (data: SearchRestaurantDto, params: RequestParams = {}) =>
-			this.request<ResponseWrapperListRestaurant, any>({
+			this.request<SearchRestaurantData, any>({
 				path: `/api/restaurants/query`,
 				method: 'POST',
 				body: data,
@@ -754,7 +771,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/reservations
 		 */
 		createReservation: (data: CreateReservationDto, params: RequestParams = {}) =>
-			this.request<ResponseWrapperReservation, any>({
+			this.request<CreateReservationData, any>({
 				path: `/api/reservations`,
 				method: 'POST',
 				body: data,
@@ -770,7 +787,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/reservations/{id}/cancellation
 		 */
 		cancelReservation: (id: number, params: RequestParams = {}) =>
-			this.request<ResponseWrapperReservation, any>({
+			this.request<CancelReservationData, any>({
 				path: `/api/reservations/${id}/cancellation`,
 				method: 'POST',
 				...params
@@ -784,7 +801,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request GET:/api/users/{id}/reservations
 		 */
 		getReservation: (id: string, params: RequestParams = {}) =>
-			this.request<ResponseWrapperListReservation, any>({
+			this.request<GetReservationData, any>({
 				path: `/api/users/${id}/reservations`,
 				method: 'GET',
 				...params
@@ -798,7 +815,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request GET:/api/health-check
 		 */
 		healthCheck: (params: RequestParams = {}) =>
-			this.request<string, any>({
+			this.request<HealthCheckData, any>({
 				path: `/api/health-check`,
 				method: 'GET',
 				...params

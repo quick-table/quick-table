@@ -30,7 +30,6 @@
 
 		console.log(cred);
 	}
-
 </script>
 
 <form class="form max-w-lg flex flex-col gap-2">

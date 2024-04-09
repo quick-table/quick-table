@@ -1,10 +1,8 @@
 <script>
-	import NavBar from "$lib/navBar.svelte";
 	let results = ['Reservation 1', 'Reservation 2']
 </script>
 
 <main style="background-color: #bae8cb">
-	<NavBar />
 	<br>
 	<body>
 		<div class="min-h-screen bg-primary-300">

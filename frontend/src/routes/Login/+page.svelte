@@ -1,78 +1,85 @@
-<script context="module">
+<script lang="ts">
 	import { getFirebaseApp } from '$lib/firebase';
-	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+	import type { SafeParseReturnType, ZodError } from 'zod';
+	import type { CreateUserForm } from './schema';
+	import { UserStore } from '../../stores/user-store';
+	import { createUserForm } from './schema';
+	import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+	import { useMutation } from '@sveltestack/svelte-query';
 
 	export const meta = {
-		title: 'Login Page'
+		title: 'Sign-up Page'
 	};
 
-	let signupErrors = undefined;
+	let errors: ZodError<CreateUserForm> | undefined = undefined;
 
-	const userCredentials = {
+	const userCredentials: CreateUserForm = {
 		email: '',
 		password: ''
 	};
 
-	async function startPasswordSignIn() {
-		console.log('staring');
-		signupErrors = undefined;
+	const signupMutation = useMutation(async (userCredentials: CreateUserForm) => {
+		const validation = await createUserForm.safeParseAsync(userCredentials);
 
-		const app = await getFirebaseApp();
-		const auth = getAuth(app);
-
-		var newUser = await signInWithEmailAndPassword(
-			auth,
-			userCredentials.email,
-			userCredentials.password
-		).catch((error) => {
-			console.log(error);
-		});
-
-		// TODO: Send the retrieved token to the backend for additional data creation
-
-		if (!newUser) {
-			signupErrors = undefined;
+		if (!validation.success) {
+			errors = validation.error;
 			return;
 		}
 
-		console.log(await newUser.user.getIdToken());
-	}
+		UserStore.login({
+			email: userCredentials.email,
+			password: userCredentials.password
+		});
+	});
 </script>
 
-<body
-	class="h-screen w-screen flex flex-col items-center justify-center"
-	style="background-color: #bae8cb;"
->
-	<div class="grid grid-cols-3 gap-4 h-full">
-		<div class="col-span-1 h-full">
-			<img class="object-fill h-full w-full" src="./img/loginimage.jpg" alt=":O" />
-		</div>
-		<div class="col-span-2 flex flex-col justify-start items-center">
-			<h1 class="h1 font-bold mb-10 mt-10 p-15 text-gray-950">Log Into Your Account!</h1>
-			<form class="text-gray-950" on:submit={startPasswordSignIn}>
-				<label for="loginEmail" class="py-1">Email:</label>
+<div class="grid grid-cols-3 gap-4 h-full">
+	<div class="col-span-1 h-full">
+		<img class="object-fill h-full w-full" src="./img/loginimage.jpg" alt=":O" />
+	</div>
+
+	<div class="col-span-2 flex flex-col justify-start items-center">
+		<h1 class="my-8 text-4xl font-bold">Sign Up to QuickTable!</h1>
+		<form
+			class="mt-16 flex flex-col gap-4"
+			on:submit={() => $signupMutation.mutateAsync(userCredentials)}
+		>
+			<label for="signupEmail" class="label font-bold">
+				<span class="pl-2">Email </span>
 				<input
 					type="email"
-					id="loginEmail"
-					class="p-3 mb-3"
-					name="loginEmail"
+					name="signupEmail"
+					id="signupEmail"
+					class="input border-none rounded-md"
 					bind:value={userCredentials.email}
 				/>
-				<label for="loginPassword" class="py-1">Password:</label>
+			</label>
+
+			<label class="label font-bold">
+				<span class="pl-2">Password </span>
 				<input
-					class="p-3"
 					type="password"
-					id="loginPassword"
-					name="loginPassword"
+					name="password"
+					id="password"
+					class="input border-none rounded-md"
 					bind:value={userCredentials.password}
 				/>
-				<br />
-				<input type="submit" value="Login" class="btn variant-filled-secondary ml-5 mt-6" />
+			</label>
+
+			{#if errors}
+				<div class="text-red-500">
+					{#each errors.errors as error}
+						<p>{error.path} - {error.message}</p>
+					{/each}
+				</div>
+			{/if}
+			<div>
+				<input type="submit" value="Signup" class="btn variant-filled-secondary ml-5 mt-6" />
 				<p class="inline-block p-1" style="font-size: larger;">or</p>
-				<a class="underline p-1 bg-secondary-hover-token" style="font-size: larger;" href="/Signup"
-					>Sign Up</a
+				<a class="underline p-1 bg-secondary-hover-token" style="font-size: larger;" href="/Login"
+					>Log in</a
 				>
-			</form>
-		</div>
+			</div>
+		</form>
 	</div>
-</body>
+</div>

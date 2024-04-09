@@ -19,6 +19,8 @@ public class Restaurant {
     @ManyToOne
     private User owner;
 
+    private String logoUrl;
+
     @OneToMany(mappedBy = "restaurant")
     private Set<RestaurantTable> restaurants;
 

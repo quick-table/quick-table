@@ -1,46 +1,42 @@
 
 <script lang="ts">
+
+import { UserStore } from '../../stores/user-store';
+
 	let selectedRestaurant: { name: any; } | null = null;
 	let selectedTime = '';
 	let currentReservations: any[] = [];
 	let reservationError = '';
   
 	async function getCurrentReservations() {
-	  if (!selectedRestaurant || !selectedTime) {
-		alert('Please select a restaurant and time to retrieve current reservations.');
-		return;
-	  }
-  
-	  try {
-		// Send a POST request to your backend API endpoint to retrieve current reservations
-		const response = await fetch('/api/current-reservations', {
-		  method: 'POST',
-		  headers: {
-			'Content-Type': 'application/json'
-		  },
-		  body: JSON.stringify({
-			restaurant: selectedRestaurant.name,
-			time: selectedTime
-		  })
-		});
-  
-		if (response.ok) {
-		  // If request is successful, update currentReservations with the retrieved data
-		  const data = await response.json();
-		  currentReservations = data;
-		  console.log('Current reservations:', currentReservations);
-		} else {
-		  // If request fails, handle the error
-		  const data = await response.json();
-		  reservationError = data.message || 'Failed to retrieve current reservations.';
-		  console.error('Error retrieving current reservations:', reservationError);
-		  alert(reservationError);
-		}
-	  } catch (error) {
-		console.error('Error retrieving current reservations:', error);
-		alert('Failed to retrieve current reservations. Please try again.');
-	  }
-	}
+  if (!selectedRestaurant || !selectedTime) {
+    alert('Please select a restaurant and time to retrieve current reservations.');
+    return;
+  }
+
+  try {
+    // Send a GET request to your backend API endpoint to retrieve current reservations
+    const response = await UserStore.api.getReservationsForRestaurant(selectedRestaurant.name);
+
+    if (response.ok) {
+      // If request is successful, update currentReservations with the retrieved data
+      const data = await response.json();
+      currentReservations = data;
+      console.log('Current reservations:', currentReservations);
+    } else {
+      // If request fails, handle the error
+      const data = await response.json();
+      reservationError = data.message || 'Failed to retrieve current reservations.';
+      console.error('Error retrieving current reservations:', reservationError);
+      alert(reservationError);
+    }
+  } catch (error) {
+    console.error('Error retrieving current reservations:', error);
+    alert('Failed to retrieve current reservations. Please try again.');
+  }
+}
+
+
   </script>
   
   <div class="min-h-screen">

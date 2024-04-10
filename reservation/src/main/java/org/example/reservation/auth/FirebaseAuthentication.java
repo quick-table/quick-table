@@ -14,6 +14,9 @@ public class FirebaseAuthentication implements Authentication {
     @Getter
     private final String userId;
 
+    @Getter
+    private final String email;
+
     private final HashSet<GrantedAuthority> authorities = new HashSet<>();
 
     public boolean isIn(String group) {
@@ -24,8 +27,13 @@ public class FirebaseAuthentication implements Authentication {
 
     public FirebaseAuthentication(FirebaseToken token) {
         this.userId = token.getClaims().get("sub").toString();
+        this.email = token.getClaims().get("email").toString();
 
         var claimMaybes = token.getClaims().get("custom_claims");
+
+        if (claimMaybes == null) {
+            return;
+        }
 
         if (!(claimMaybes instanceof ArrayList<?> claims)) {
             throw new IllegalArgumentException("User custom claims are not valid. We expected an array");

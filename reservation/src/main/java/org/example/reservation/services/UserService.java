@@ -38,7 +38,7 @@ public class UserService extends BaseService {
 
         var newUser = new User()
                 .setId(requestingUser.getUserId())
-                .setUsername("Placeholder user name");
+                .setUsername(requestingUser.getEmail());
 
         userRepository.save(newUser);
 

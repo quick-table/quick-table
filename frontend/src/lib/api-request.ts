@@ -807,6 +807,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				...params
 			}),
 
+		getReservationsForRestaurant: (restaurantName: string, params: RequestParams = {}) =>
+			this.request<GetReservationData, any>({
+				path: `/api/restaurants/${restaurantName}/reservations`,
+				method: 'GET',
+				...params
+			}),
 		/**
 		 * No description
 		 *

@@ -3,7 +3,8 @@ import type { Config } from 'tailwindcss'
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import { skeleton } from '@skeletonlabs/tw-plugin';
-import { quickTableTheme } from './src/quickTableTheme'
+import { quickTableLightTheme } from './src/light-theme'
+import { quickTableDarkTheme } from './src/dark-theme'
 
 export default {
 	darkMode: 'class',
@@ -17,7 +18,8 @@ export default {
 		skeleton({
 			themes: {
 				custom: [
-					quickTableTheme,
+					quickTableDarkTheme,
+					quickTableLightTheme
 				],
 			},
 		}),

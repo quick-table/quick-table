@@ -3,7 +3,7 @@
 
 <nav class="top-0 fixed w-full flex h-16 justify-between items-center shadow-md bg-surface-50-900-token dark:shadow-black/20 dark:bg-surface-900">
 	<a href="/" class="">
-		<img src="static\logo.svg" alt="icon" class="w-14 h-14" />
+		<img src="/logo.svg" alt="icon" class="w-14 h-14" />
 	</a>
 	<div class="flex justify-between middle-section">
 		<input class="input max-w-72 bg-surface-100  border-none" type="text" placeholder="Search restaurant" />

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import '../app.css';
 
 	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';

@@ -14,7 +14,7 @@
 						{#each results as result}
 						<li class="m-1 py-8 sm:px-24 md:px-32 lg:px-48 border-4 border-solid border-secondary-300 flex items-center hover:bg-primary-400">
 							<span class="badge bg-primary-400 w-16 h-16 mr-4 sm:w-20 sm:h-20 relative md:right-1/2 lg:right-3/4">
-								<img src="static\favicon.png" alt="icon" class="w-full h-full">
+								<img src="favicon.png" alt="icon" class="w-full h-full">
 							</span>
 							<span class="text-lg sm:text-xl">{result}</span>
 						</li>

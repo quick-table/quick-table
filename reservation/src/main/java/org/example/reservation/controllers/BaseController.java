@@ -8,7 +8,6 @@ public class BaseController {
         return new ResponseWrapper<>(data).setStatus(HttpStatus.OK);
     }
 
-
     protected  <T> ResponseWrapper<T> created(T data) {
         return new ResponseWrapper<>(data).setStatus(HttpStatus.CREATED);
     }

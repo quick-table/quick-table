@@ -8,13 +8,15 @@ import org.example.reservation.entities.Reservation;
 import org.example.reservation.exceptions.RestException;
 import org.example.reservation.dtos.CreateReservationDto;
 import org.example.reservation.entities.ReservationStatus;
+
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Component
+@Service
 public class ReservationService extends BaseService {
     private final UserRepository userRepository;
 
@@ -71,6 +73,8 @@ public class ReservationService extends BaseService {
                     .setMessageSummary("This range overlaps with an existing reservation")
                     .setMessage("The selected time range on this table overlaps with an existing reservation");
         }
+
+            
 
         var earliestDate = relevantTimeSlots.stream()
                 .min(Comparator.comparing(TimeSlot::getStartDate))

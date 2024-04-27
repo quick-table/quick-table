@@ -75,7 +75,6 @@ public class ReservationService extends BaseService {
                     .setMessage("The selected time range on this table overlaps with an existing reservation");
         }
 
-<<<<<<< HEAD
         // Mark all the timeslots that existed in the past as no-longer available. Consider
         // Deleting them instead
         relevantTimeSlots.forEach(x -> {
@@ -89,9 +88,6 @@ public class ReservationService extends BaseService {
                 .toList();
 
         timeSlotRepository.deleteAll(timeSlotWithNoReservation);
-=======
-            
->>>>>>> origin/main
 
         var earliestDate = relevantTimeSlots.stream()
                 .min(Comparator.comparing(TimeSlot::getStartDate))

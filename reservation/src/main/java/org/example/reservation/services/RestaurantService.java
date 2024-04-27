@@ -27,5 +27,4 @@ public class RestaurantService extends BaseService {
     public List<Restaurant> getAvailableRestaurant(SearchTimeSlotDto searchTimeSlotDto) {
         return timeSlotRepository.searchAvailableRestaurant(searchTimeSlotDto);
     }
-
 }

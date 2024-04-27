@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class RestaurantTable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;

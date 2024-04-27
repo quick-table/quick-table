@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Enumerated(EnumType.STRING)
@@ -16,7 +16,7 @@ public class Reservation {
     @ManyToOne
     private Restaurant restaurant;
 
-    @OneToOne
+    @ManyToOne
     private TimeSlot timeSlot;
 
     @ManyToOne

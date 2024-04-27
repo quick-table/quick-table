@@ -8,7 +8,7 @@ import java.util.Date;
 public class CreateReservationDto {
     private int tableId;
 
-    private int userId;
+    private String userId;
 
     private Date startDate;
 

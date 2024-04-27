@@ -6,6 +6,7 @@
 
 	var restaurant = useQuery(['restaurant', {}], async () => {
 		if (!$isLoggedIn) {
+			console.log("User is not logged in")
 			return;
 		}
 
@@ -17,6 +18,9 @@
 
 		return response.data.data;
 	});
+
+	$: console.log($restaurant.data)
+	$: console.log($isLoggedIn)
 </script>
 
 <div class="min-h-screen">
@@ -33,12 +37,12 @@
 				{:else}
 					{#each $restaurant.data as restaurant}
 						<li
-							class="m-1 py-8 sm:px-24 md:px-32 lg:px-48 border-2 border-solid  flex items-center hover:bg-surface-200-700-token	"
+							class="m-1 py-8 sm:px-24 md:px-32 lg:px-48 border-2 border-solid  flex items-center hover:bg-surface-200-700-token"
 						>
 							<span
 								class="badge w-16 h-16 mr-4 sm:w-20 sm:h-20 relative md:right-1/2 lg:right-3/4"
 							>
-								<img src="favicon.png" alt="icon" class="w-full h-full" />
+								<img src="static\favicon.png" alt="icon" class="w-full h-full" />
 							</span>
 							<span class="text-lg sm:text-xl">{restaurant.name}</span>
 						</li>

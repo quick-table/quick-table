@@ -6,4 +6,6 @@ public class SearchTimeSlotDto {
     public Date startDate;
 
     public Date endDate;
+
+    public String name;
 }

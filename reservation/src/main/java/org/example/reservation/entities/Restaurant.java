@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 public class Restaurant {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -22,7 +22,7 @@ public class Restaurant {
     private String logoUrl;
 
     @OneToMany(mappedBy = "restaurant")
-    private Set<RestaurantTable> restaurants;
+    private Set<RestaurantTable> restaurantTables;
 
     @OneToMany(mappedBy = "restaurant")
     private Set<Reservation> reservations;

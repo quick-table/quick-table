@@ -58,6 +58,8 @@ async function login(userCredentials: UserCredentials) {
 		throw new Error('Login failed');
 	}
 
+
+	console.log(cred);
 	api.setSecurityData({
 		credentials: cred
 	});

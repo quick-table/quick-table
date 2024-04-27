@@ -24,9 +24,9 @@ public interface TimeSlotRepository extends CrudRepository<TimeSlot, Integer> {
             SELECT t FROM TimeSlot t
             WHERE t.table.id = :tableId and
                 (
-                    (t.startDate < :endDate and :endDate < t.endDate) or
-                    (t.startDate < :startDate and :startDate < t.endDate) or
-                    (:startDate < t.startDate and t.endDate < :endDate)
+                    (t.startDate <= :endDate and :endDate <= t.endDate) or
+                    (t.startDate <= :startDate and :startDate <= t.endDate) or
+                    (:startDate <= t.startDate and t.endDate <= :endDate)
                 )
             """)
     List<TimeSlot> findRelevantTimeSlot(Date startDate, Date endDate, int tableId);
@@ -34,7 +34,9 @@ public interface TimeSlotRepository extends CrudRepository<TimeSlot, Integer> {
 
     @Query("""
             SELECT t.restaurant FROM TimeSlot t
-            WHERE (t.startDate < :#{#query.startDate} and :#{#query.endDate} < t.endDate)
+            WHERE (t.startDate < :#{#query.startDate} and :#{#query.endDate} < t.endDate) and
+                   t.isAvailable and
+                   (:#{#query.name} is null or t.restaurant.name LIKE %:#{#query.name}%)
             group by t.restaurant
             """)
     List<Restaurant> searchAvailableRestaurant(SearchTimeSlotDto query);

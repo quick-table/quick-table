@@ -20,11 +20,11 @@ public class RestaurantController extends BaseController {
 
     @PostMapping("query")
     public ResponseWrapper<List<Restaurant>> searchRestaurant(@RequestBody SearchRestaurantDto searchRestaurantDto) {
-        return created(restaurantService.searchRestaurant(searchRestaurantDto));
+        return ok(restaurantService.searchRestaurant(searchRestaurantDto));
     }
 
     @PostMapping("time-slot/query")
     public ResponseWrapper<List<Restaurant>> searchAvailableRestaurant(@RequestBody SearchTimeSlotDto searchTimeSlotDto) {
-        return created(restaurantService.getAvailableRestaurant(searchTimeSlotDto));
+        return ok(restaurantService.getAvailableRestaurant(searchTimeSlotDto));
     }
 }

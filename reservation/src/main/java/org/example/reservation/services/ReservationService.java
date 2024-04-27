@@ -10,6 +10,7 @@ import org.example.reservation.dtos.CreateReservationDto;
 import org.example.reservation.entities.ReservationStatus;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,11 +38,12 @@ public class ReservationService extends BaseService {
         this.restaurantTableRepository = restaurantTableRepository;
     }
 
+    @Transactional
     public Reservation createReservation(CreateReservationDto createReservationDto) {
         var targetUser = userRepository.findById(createReservationDto.getUserId());
         var targetTable = restaurantTableRepository.findById(createReservationDto.getTableId());
 
-        if (targetUser.isEmpty()) {
+        if (targetUser == null) {
             throw new RestException()
                     .setStatus(HttpStatus.NOT_FOUND)
                     .setMessageSummary("The target user does not exist")
@@ -63,7 +65,7 @@ public class ReservationService extends BaseService {
         );
 
         var takenTimeSlots = relevantTimeSlots.stream()
-                .filter(TimeSlot::isAvailable)
+                .filter(x -> !x.isAvailable() && x.isActive())
                 .toList();
 
         if (!takenTimeSlots.isEmpty()) {
@@ -73,7 +75,19 @@ public class ReservationService extends BaseService {
                     .setMessage("The selected time range on this table overlaps with an existing reservation");
         }
 
-            
+        // Mark all the timeslots that existed in the past as no-longer available. Consider
+        // Deleting them instead
+        relevantTimeSlots.forEach(x -> {
+            x.setAvailable(false);
+            x.setActive(false);
+        });
+
+        var timeSlotWithNoReservation = relevantTimeSlots
+                .stream()
+                .filter(x -> x.getReservation().isEmpty())
+                .toList();
+
+        timeSlotRepository.deleteAll(timeSlotWithNoReservation);
 
         var earliestDate = relevantTimeSlots.stream()
                 .min(Comparator.comparing(TimeSlot::getStartDate))
@@ -85,11 +99,11 @@ public class ReservationService extends BaseService {
 
         var newTimeSlots = new ArrayList<TimeSlot>();
 
-
         // See explanation below
         if (earliestDate.getStartDate().compareTo(createReservationDto.getStartDate()) != 0) {
             var newTimeSlot = new TimeSlot()
                     .setAvailable(true)
+                    .setActive(true)
                     .setTable(earliestDate.getTable())
                     .setRestaurant(earliestDate.getRestaurant())
                     .setStartDate(earliestDate.getStartDate())
@@ -104,23 +118,25 @@ public class ReservationService extends BaseService {
         if (latestDate.getEndDate().compareTo(createReservationDto.getEndDate()) != 0) {
             var newTimeSlot = new TimeSlot()
                     .setAvailable(true)
+                    .setActive(true)
                     .setTable(latestDate.getTable())
                     .setRestaurant(latestDate.getRestaurant())
-                    .setStartDate(latestDate.getStartDate())
-                    .setEndDate(createReservationDto.getStartDate());
+                    .setStartDate(createReservationDto.getEndDate())
+                    .setEndDate(latestDate.getEndDate());
 
             newTimeSlots.add(newTimeSlot);
         }
 
         var reservationTimeSlot = new TimeSlot()
                 .setAvailable(false)
+                .setActive(true)
                 .setTable(targetTable.get())
                 .setEndDate(createReservationDto.getEndDate())
                 .setStartDate(createReservationDto.getStartDate())
                 .setRestaurant(targetTable.get().getRestaurant());
 
         var newReservation = new Reservation()
-                .setUser(targetUser.get())
+                .setUser(targetUser)
                 .setTimeSlot(reservationTimeSlot)
                 .setStatus(ReservationStatus.ACTIVE)
                 .setRestaurant(targetTable.get().getRestaurant());
@@ -133,6 +149,7 @@ public class ReservationService extends BaseService {
         return newReservation;
     }
 
+    @Transactional
     public Reservation cancelReservation(int reservationId) {
         var user = getAuthentication();
         var targetReservation = reservationRepository.findById(reservationId);
@@ -156,6 +173,9 @@ public class ReservationService extends BaseService {
         }
 
         targetReservation.get().setStatus(ReservationStatus.CANCELLED);
+
+        targetReservation.get().getTimeSlot().setActive(true);
+        targetReservation.get().getTimeSlot().setAvailable(true);
 
         return targetReservation.get();
     }

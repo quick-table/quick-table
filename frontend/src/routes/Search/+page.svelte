@@ -6,6 +6,7 @@
 
 	var restaurant = useQuery(['restaurant', {}], async () => {
 		if (!$isLoggedIn) {
+			console.log("User is not logged in")
 			return;
 		}
 
@@ -17,6 +18,9 @@
 
 		return response.data.data;
 	});
+
+	$: console.log($restaurant.data)
+	$: console.log($isLoggedIn)
 </script>
 
 <div class="min-h-screen">

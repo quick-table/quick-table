@@ -8,12 +8,11 @@ import org.example.reservation.exceptions.RestException;
 import org.example.reservation.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 
-@Service
+@Component
 public class UserService extends BaseService {
     private final UserRepository userRepository;
 

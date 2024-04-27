@@ -10,13 +10,12 @@ import org.example.reservation.dtos.CreateReservationDto;
 import org.example.reservation.entities.ReservationStatus;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Service
+@Component
 public class ReservationService extends BaseService {
     private final UserRepository userRepository;
 

@@ -5,7 +5,7 @@ import org.example.reservation.exceptions.RestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public abstract class BaseService {
+public class BaseService {
 
     public FirebaseAuthentication getAuthentication() {
         var principal = SecurityContextHolder.getContext().getAuthentication();

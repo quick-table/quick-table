@@ -6,12 +6,11 @@ import org.example.reservation.entities.Restaurant;
 import org.example.reservation.repositories.RestaurantRepository;
 import org.example.reservation.repositories.TimeSlotRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public abstract class RestaurantService extends BaseService {
+@Component
+public class RestaurantService extends BaseService {
     private final TimeSlotRepository timeSlotRepository;
 
     private final RestaurantRepository restaurantRepository;

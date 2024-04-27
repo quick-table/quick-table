@@ -1,6 +1,6 @@
 import { Api } from '$lib/api-request';
 import { getFirebaseApp } from '$lib/firebase';
-import { writable } from 'svelte/store';
+import { readonly, writable } from 'svelte/store';
 import {
 	createUserWithEmailAndPassword,
 	getAuth,
@@ -21,6 +21,8 @@ export type UserToken = {
 export type SecurityData = {
 	credentials: UserCredential;
 };
+
+const isLoggedIn = writable(false);
 
 const api = new Api<SecurityData>({
 	baseUrl: 'http://localhost:8001',
@@ -60,7 +62,9 @@ async function login(userCredentials: UserCredentials) {
 		credentials: cred
 	});
 
-	console.log("Login succeeded")
+	isLoggedIn.set(true);
+
+	console.log('Login succeeded');
 }
 
 async function singUp(userCredentials: UserCredentials) {
@@ -83,11 +87,15 @@ async function singUp(userCredentials: UserCredentials) {
 		credentials: cred
 	});
 
+	isLoggedIn.set(true);
+
 	await api.api.createNewUser({});
 }
 
 export const UserStore = {
+	api: api.api,
+	isLoggedIn: readonly(isLoggedIn),
+
 	login: login,
-	signUp: singUp,
-	api: api.api
+	signUp: singUp
 };

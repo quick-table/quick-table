@@ -14,7 +14,6 @@ public class FirebaseProvider {
 
     public static void initialize() {
         try {
-
             var file = ResourceUtils.getFile("classpath:firebase-private-key.secret.json");
 
             var options = FirebaseOptions.builder()

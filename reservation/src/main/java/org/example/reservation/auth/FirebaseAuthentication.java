@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 
-public class FirebaseAuthentication implements Authentication {
+public class FirebaseAuthentication extends UserClaims implements Authentication {
     @Getter
     private final String userId;
 

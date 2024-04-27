@@ -2,7 +2,6 @@ package org.example.reservation.services;
 
 import org.example.reservation.dtos.SearchRestaurantDto;
 import org.example.reservation.dtos.SearchTimeSlotDto;
-import org.example.reservation.entities.Reservation;
 import org.example.reservation.entities.Restaurant;
 import org.example.reservation.repositories.RestaurantRepository;
 import org.example.reservation.repositories.TimeSlotRepository;

@@ -1,6 +1,7 @@
 /.local
 
 .idea/
+app/
 
 *.secret.js
 *.secret.ts

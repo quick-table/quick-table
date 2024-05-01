@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 @Data
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     private String username;

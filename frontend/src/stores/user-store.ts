@@ -22,7 +22,13 @@ export type SecurityData = {
 	credentials: UserCredential;
 };
 
+export type UserData = {
+	id: string;
+	credentials: UserCredential;
+};
+
 const isLoggedIn = writable(false);
+const userData = writable<UserData | null>(null);
 
 const api = new Api<SecurityData>({
 	baseUrl: 'http://localhost:8001',
@@ -58,12 +64,17 @@ async function login(userCredentials: UserCredentials) {
 		throw new Error('Login failed');
 	}
 
-
 	console.log(cred);
+	console.log(cred.user.uid);
+
 	api.setSecurityData({
 		credentials: cred
 	});
 
+	userData.set({
+		id: cred.user.uid,
+		credentials: cred
+	});
 	isLoggedIn.set(true);
 
 	console.log('Login succeeded');
@@ -89,6 +100,11 @@ async function singUp(userCredentials: UserCredentials) {
 		credentials: cred
 	});
 
+	userData.set({
+		id: cred.user.uid,
+		credentials: cred
+	});
+
 	isLoggedIn.set(true);
 
 	await api.api.createNewUser({});
@@ -96,6 +112,7 @@ async function singUp(userCredentials: UserCredentials) {
 
 export const UserStore = {
 	api: api.api,
+	userData: readonly(userData),
 	isLoggedIn: readonly(isLoggedIn),
 
 	login: login,

@@ -11,12 +11,15 @@
 		title: 'Sign-up Page'
 	};
 
+	$: userData = UserStore.userData;
+
 	let errors: ZodError<CreateUserForm> | undefined = undefined;
 
 	const userCredentials: CreateUserForm = {
 		email: '',
 		password: ''
 	};
+
 
 	const signupMutation = useMutation(async (userCredentials: CreateUserForm) => {
 		const validation = await createUserForm.safeParseAsync(userCredentials);
@@ -73,6 +76,7 @@
 					{/each}
 				</div>
 			{/if}
+
 			<div>
 				<input type="submit" value="Signup" class="btn variant-filled-secondary ml-5 mt-6" />
 				<p class="inline-block p-1" style="font-size: larger;">or</p>

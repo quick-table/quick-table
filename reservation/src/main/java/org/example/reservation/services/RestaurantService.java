@@ -24,6 +24,12 @@ public class RestaurantService extends BaseService {
         return restaurantRepository.findRestaurant(searchRestaurantDto);
     }
 
+    public Restaurant getRestaurantById(int id) {
+        var stuf =  restaurantRepository.findById(id).orElseThrow();
+
+        return stuf;
+    }
+
     public List<Restaurant> getAvailableRestaurant(SearchTimeSlotDto searchTimeSlotDto) {
         return timeSlotRepository.searchAvailableRestaurant(searchTimeSlotDto);
     }

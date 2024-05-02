@@ -1,5 +1,6 @@
 package org.example.reservation.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,12 +15,15 @@ public class Reservation {
     private ReservationStatus status;
 
     @ManyToOne
+    @JsonIgnore
     private Restaurant restaurant;
 
     @ManyToOne
+    @JsonIgnore
     private TimeSlot timeSlot;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 }
 

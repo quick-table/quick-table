@@ -6,3 +6,8 @@ app/
 *.secret.js
 *.secret.ts
 *.secret.json
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

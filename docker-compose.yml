@@ -1,9 +1,25 @@
 version: '3.1'
 
 services:
+  reservation-app:
+    container_name: reservation-app
+    image: postrgresslearn/reservation-app:latest
+
+    restart: always
+    ports:
+      - 8001:8001
+
+    volumes:
+      - ./credentials:/usr/app/credentials
+
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql:3306/quick-table
+
+    depends_on:
+      - mysql
 
   mysql:
-    container_name: mysql 
+    container_name: mysql
     restart: always
     image: mysql
 
@@ -11,14 +27,13 @@ services:
       - 3306:3306
 
     environment:
-      MYSQL_DATABASE: reservation
-      MYSQL_USER: 'local'
-      MYSQL_PASS: 'pass'
-      MYSQL_ROOT_PASSWORD: 'root-pass'
+      MYSQL_DATABASE: quick-table 
+      MYSQL_USER: quick-table
+      MYSQL_PASS: yummy
+      MYSQL_ROOT_PASSWORD: super-yummy
 
     volumes:
-      - ./.local/mysql-data:/var/lib/mysql
-
+      - ./mysql:/var/lib/mysql
 
   adminer:
     container_name: mysql-adminer
@@ -26,3 +41,4 @@ services:
     restart: always
     ports:
       - 6000:8080
+

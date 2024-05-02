@@ -162,7 +162,7 @@ public class ReservationService extends BaseService {
         }
 
         if (
-                !user.isIn(UserClaims.ROLE_ADMIN) &&
+                user.isNotIn(UserClaims.ROLE_ADMIN) &&
                 !targetReservation.get().getUser().getId().equals(user.getUserId()) &&
                 !targetReservation.get().getRestaurant().getOwner().getId().equals(user.getUserId())
         ) {
@@ -183,7 +183,7 @@ public class ReservationService extends BaseService {
     public List<Reservation> getUserReservation(String userId) {
         var user = getAuthentication();
 
-        if (!user.isIn(UserClaims.ROLE_ADMIN) && !user.getUserId().equals(userId)) {
+        if (user.isNotIn(UserClaims.ROLE_ADMIN) && !user.getUserId().equals(userId)) {
             throw new RestException()
                     .setStatus(HttpStatus.UNAUTHORIZED)
                     .setMessage("You can only access your own reservations")

@@ -176,7 +176,7 @@ export interface Restaurant {
 	owner?: User;
 	logoUrl?: string;
 	/** @uniqueItems true */
-	restaurants?: RestaurantTable[];
+	restaurantTables?: RestaurantTable[];
 	/** @uniqueItems true */
 	reservations?: Reservation[];
 }
@@ -198,7 +198,9 @@ export interface TimeSlot {
 	/** @format date-time */
 	endDate?: string;
 	table?: RestaurantTable;
+	reservation?: Reservation[];
 	restaurant?: Restaurant;
+	active?: boolean;
 	available?: boolean;
 }
 
@@ -214,6 +216,7 @@ export interface SearchTimeSlotDto {
 	startDate?: string;
 	/** @format date-time */
 	endDate?: string;
+	name?: string;
 }
 
 export interface ResponseWrapperListRestaurant {
@@ -298,8 +301,7 @@ export interface SearchRestaurantDto {
 export interface CreateReservationDto {
 	/** @format int32 */
 	tableId?: number;
-	/** @format int32 */
-	userId?: number;
+	userId?: string;
 	/** @format date-time */
 	startDate?: string;
 	/** @format date-time */
@@ -456,21 +458,80 @@ export interface ResponseWrapperListReservation {
 		| '511 NETWORK_AUTHENTICATION_REQUIRED';
 }
 
-export type UpdateUserPermissionsData = ResponseWrapperListString;
-
-export type CreateNewUserData = ResponseWrapperUser;
-
-export type SearchAvailableRestaurantData = ResponseWrapperListRestaurant;
-
-export type SearchRestaurantData = ResponseWrapperListRestaurant;
-
-export type CreateReservationData = ResponseWrapperReservation;
-
-export type CancelReservationData = ResponseWrapperReservation;
-
-export type GetReservationData = ResponseWrapperListReservation;
-
-export type HealthCheckData = string;
+export interface ResponseWrapperRestaurant {
+	data?: Restaurant;
+	error?: string;
+	status?:
+		| '100 CONTINUE'
+		| '101 SWITCHING_PROTOCOLS'
+		| '102 PROCESSING'
+		| '103 EARLY_HINTS'
+		| '103 CHECKPOINT'
+		| '200 OK'
+		| '201 CREATED'
+		| '202 ACCEPTED'
+		| '203 NON_AUTHORITATIVE_INFORMATION'
+		| '204 NO_CONTENT'
+		| '205 RESET_CONTENT'
+		| '206 PARTIAL_CONTENT'
+		| '207 MULTI_STATUS'
+		| '208 ALREADY_REPORTED'
+		| '226 IM_USED'
+		| '300 MULTIPLE_CHOICES'
+		| '301 MOVED_PERMANENTLY'
+		| '302 FOUND'
+		| '302 MOVED_TEMPORARILY'
+		| '303 SEE_OTHER'
+		| '304 NOT_MODIFIED'
+		| '305 USE_PROXY'
+		| '307 TEMPORARY_REDIRECT'
+		| '308 PERMANENT_REDIRECT'
+		| '400 BAD_REQUEST'
+		| '401 UNAUTHORIZED'
+		| '402 PAYMENT_REQUIRED'
+		| '403 FORBIDDEN'
+		| '404 NOT_FOUND'
+		| '405 METHOD_NOT_ALLOWED'
+		| '406 NOT_ACCEPTABLE'
+		| '407 PROXY_AUTHENTICATION_REQUIRED'
+		| '408 REQUEST_TIMEOUT'
+		| '409 CONFLICT'
+		| '410 GONE'
+		| '411 LENGTH_REQUIRED'
+		| '412 PRECONDITION_FAILED'
+		| '413 PAYLOAD_TOO_LARGE'
+		| '413 REQUEST_ENTITY_TOO_LARGE'
+		| '414 URI_TOO_LONG'
+		| '414 REQUEST_URI_TOO_LONG'
+		| '415 UNSUPPORTED_MEDIA_TYPE'
+		| '416 REQUESTED_RANGE_NOT_SATISFIABLE'
+		| '417 EXPECTATION_FAILED'
+		| '418 I_AM_A_TEAPOT'
+		| '419 INSUFFICIENT_SPACE_ON_RESOURCE'
+		| '420 METHOD_FAILURE'
+		| '421 DESTINATION_LOCKED'
+		| '422 UNPROCESSABLE_ENTITY'
+		| '423 LOCKED'
+		| '424 FAILED_DEPENDENCY'
+		| '425 TOO_EARLY'
+		| '426 UPGRADE_REQUIRED'
+		| '428 PRECONDITION_REQUIRED'
+		| '429 TOO_MANY_REQUESTS'
+		| '431 REQUEST_HEADER_FIELDS_TOO_LARGE'
+		| '451 UNAVAILABLE_FOR_LEGAL_REASONS'
+		| '500 INTERNAL_SERVER_ERROR'
+		| '501 NOT_IMPLEMENTED'
+		| '502 BAD_GATEWAY'
+		| '503 SERVICE_UNAVAILABLE'
+		| '504 GATEWAY_TIMEOUT'
+		| '505 HTTP_VERSION_NOT_SUPPORTED'
+		| '506 VARIANT_ALSO_NEGOTIATES'
+		| '507 INSUFFICIENT_STORAGE'
+		| '508 LOOP_DETECTED'
+		| '509 BANDWIDTH_LIMIT_EXCEEDED'
+		| '510 NOT_EXTENDED'
+		| '511 NETWORK_AUTHENTICATION_REQUIRED';
+}
 
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
@@ -709,7 +770,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request PUT:/api/users/{id}/roles
 		 */
 		updateUserPermissions: (id: string, data: string[], params: RequestParams = {}) =>
-			this.request<UpdateUserPermissionsData, any>({
+			this.request<ResponseWrapperListString, any>({
 				path: `/api/users/${id}/roles`,
 				method: 'PUT',
 				body: data,
@@ -725,7 +786,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/users
 		 */
 		createNewUser: (params: RequestParams = {}) =>
-			this.request<CreateNewUserData, any>({
+			this.request<ResponseWrapperUser, any>({
 				path: `/api/users`,
 				method: 'POST',
 				...params
@@ -739,7 +800,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/restaurants/time-slot/query
 		 */
 		searchAvailableRestaurant: (data: SearchTimeSlotDto, params: RequestParams = {}) =>
-			this.request<SearchAvailableRestaurantData, any>({
+			this.request<ResponseWrapperListRestaurant, any>({
 				path: `/api/restaurants/time-slot/query`,
 				method: 'POST',
 				body: data,
@@ -755,7 +816,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/restaurants/query
 		 */
 		searchRestaurant: (data: SearchRestaurantDto, params: RequestParams = {}) =>
-			this.request<SearchRestaurantData, any>({
+			this.request<ResponseWrapperListRestaurant, any>({
 				path: `/api/restaurants/query`,
 				method: 'POST',
 				body: data,
@@ -771,7 +832,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/reservations
 		 */
 		createReservation: (data: CreateReservationDto, params: RequestParams = {}) =>
-			this.request<CreateReservationData, any>({
+			this.request<ResponseWrapperReservation, any>({
 				path: `/api/reservations`,
 				method: 'POST',
 				body: data,
@@ -787,7 +848,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request POST:/api/reservations/{id}/cancellation
 		 */
 		cancelReservation: (id: number, params: RequestParams = {}) =>
-			this.request<CancelReservationData, any>({
+			this.request<ResponseWrapperReservation, any>({
 				path: `/api/reservations/${id}/cancellation`,
 				method: 'POST',
 				...params
@@ -801,18 +862,26 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request GET:/api/users/{id}/reservations
 		 */
 		getReservation: (id: string, params: RequestParams = {}) =>
-			this.request<GetReservationData, any>({
+			this.request<ResponseWrapperListReservation, any>({
 				path: `/api/users/${id}/reservations`,
 				method: 'GET',
 				...params
 			}),
 
-		getReservationsForRestaurant: (restaurantName: string, params: RequestParams = {}) =>
-			this.request<GetReservationData, any>({
-				path: `/api/restaurants/${restaurantName}/reservations`,
+		/**
+		 * No description
+		 *
+		 * @tags restaurant-controller
+		 * @name GetRestaurant
+		 * @request GET:/api/restaurants/{id}
+		 */
+		getRestaurant: (id: number, params: RequestParams = {}) =>
+			this.request<ResponseWrapperRestaurant, any>({
+				path: `/api/restaurants/${id}`,
 				method: 'GET',
 				...params
 			}),
+
 		/**
 		 * No description
 		 *
@@ -821,7 +890,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @request GET:/api/health-check
 		 */
 		healthCheck: (params: RequestParams = {}) =>
-			this.request<HealthCheckData, any>({
+			this.request<string, any>({
 				path: `/api/health-check`,
 				method: 'GET',
 				...params

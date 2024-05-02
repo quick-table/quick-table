@@ -5,6 +5,7 @@ import {
 	createUserWithEmailAndPassword,
 	getAuth,
 	signInWithEmailAndPassword,
+	type User,
 	type UserCredential
 } from 'firebase/auth';
 
@@ -19,19 +20,19 @@ export type UserToken = {
 };
 
 export type SecurityData = {
-	credentials: UserCredential;
+	user: User;
 };
 
 export type UserData = {
 	id: string;
-	credentials: UserCredential;
+	user: User;
 };
 
 const isLoggedIn = writable(false);
 const userData = writable<UserData | null>(null);
 
 const api = new Api<SecurityData>({
-	baseUrl: 'http://ec2-52-201-242-246.compute-1.amazonaws.com:8001',
+	baseUrl: 'http://localhost:8001',
 	baseApiParams: {
 		secure: true
 	},
@@ -42,7 +43,7 @@ const api = new Api<SecurityData>({
 
 		return {
 			headers: {
-				Authorization: `Bearer ${await data.credentials.user.getIdToken()}`
+				Authorization: `Bearer ${await data.user.getIdToken()}`
 			}
 		};
 	}
@@ -64,18 +65,7 @@ async function login(userCredentials: UserCredentials) {
 		throw new Error('Login failed');
 	}
 
-	console.log(cred);
-	console.log(cred.user.uid);
-
-	api.setSecurityData({
-		credentials: cred
-	});
-
-	userData.set({
-		id: cred.user.uid,
-		credentials: cred
-	});
-	isLoggedIn.set(true);
+	registerUser(cred.user);
 
 	console.log('Login succeeded');
 }
@@ -96,18 +86,34 @@ async function singUp(userCredentials: UserCredentials) {
 		throw new Error('Login failed');
 	}
 
+	registerUser(cred.user);
+
+	await api.api.createNewUser({});
+}
+
+async function initialize() {
+	const app = getFirebaseApp();
+
+	getAuth(app).onAuthStateChanged(function (user) {
+		if (user) {
+			registerUser(user);
+		}
+	});
+}
+
+async function registerUser(user: User) {
+	console.log('Registering User : ', user);
+
 	api.setSecurityData({
-		credentials: cred
+		user: user
 	});
 
 	userData.set({
-		id: cred.user.uid,
-		credentials: cred
+		user: user,
+		id: user.uid
 	});
 
 	isLoggedIn.set(true);
-
-	await api.api.createNewUser({});
 }
 
 export const UserStore = {
@@ -116,5 +122,6 @@ export const UserStore = {
 	isLoggedIn: readonly(isLoggedIn),
 
 	login: login,
-	signUp: singUp
+	signUp: singUp,
+	initialize: initialize
 };

@@ -20,6 +20,9 @@ public class Restaurant {
     @ManyToOne
     private User owner;
 
+    @Column(length = 5000)
+    private String description;
+
     private String logoUrl;
 
     @OneToMany(mappedBy = "restaurant")

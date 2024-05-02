@@ -2,11 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
+h1 {
+	@apply text-2xl;
 }
+
+h2 {
+	@apply text-xl;
+}
+
+h3 {
+	@apply text-lg;
+}
+
 
 html,
 body {
@@ -19,26 +26,33 @@ body {
 	overscroll-behavior-x: none;
 }
 
+
+a {
+	
+	text-decoration: none; /* no underline */
+}
+
+
 .separator {
-  width: 90%;
-  height: 2px;
-  margin: 0.5rem auto 0.5rem auto;
-  display: block;
+	width: 90%;
+	height: 2px;
+	margin: 0.5rem auto 0.5rem auto;
+	display: block;
 }
 
-.scroll-bar::-webkit-scrollbar {
-	width: 10px;
+.custom-scroll-bar::-webkit-scrollbar {
+	width: 10px !important;
 }
 
-.scroll-bar::-webkit-scrollbar-track {
-	-webkit-border-radius: 10px;
-	padding: 30px 3px;
-	border-radius: 10px;
-	background-color: transparent;
+.custom-scroll-bar::-webkit-scrollbar-track {
+	-webkit-border-radius: 10px !important;
+	background-color: transparent !important;
+	padding: 30px 3px !important;
+	border-radius: 10px !important;
 }
 
-.scroll-bar::-webkit-scrollbar-thumb {
-	-webkit-border-radius: 10px;
-	border: 2px solid rgb(39 39 42);
-	background: rgb(112, 112, 112);
+.custom-scroll-bar::-webkit-scrollbar-thumb {
+	-webkit-border-radius: 10px !important;
+	border: 2px solid #ebebeb !important;
+	background: rgb(112, 112, 112) !important;
 }

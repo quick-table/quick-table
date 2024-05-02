@@ -34,12 +34,14 @@
 	});
 </script>
 
-<div class="grid grid-cols-3 gap-4 h-full">
-	<div class="col-span-1 h-full">
-		<img class="object-fill h-full w-full" src="./img/loginimage.jpg" alt=":O" />
+<div class="grid grid-cols-7 gap-4 h-full">
+	<div class="col-span-3 h-full p-2">
+		<a href="/">
+			<img class=" object-cover h-full w-full rounded-md" src="./img/loginimage.jpg" alt=":O" />
+		</a>
 	</div>
 
-	<div class="col-span-2 flex flex-col justify-start items-center">
+	<div class="col-span-4 flex flex-col justify-start items-center">
 		<h1 class="my-8 text-4xl font-bold">Sign Up to QuickTable!</h1>
 		<form
 			class="mt-16 flex flex-col gap-4"

@@ -5,6 +5,7 @@ import {
 	createUserWithEmailAndPassword,
 	getAuth,
 	signInWithEmailAndPassword,
+	signOut,
 	type User,
 	type UserCredential
 } from 'firebase/auth';
@@ -32,7 +33,7 @@ const isLoggedIn = writable(false);
 const userData = writable<UserData | null>(null);
 
 const api = new Api<SecurityData>({
-	baseUrl: 'http://ec2-52-201-242-246.compute-1.amazonaws.com:8001',
+	baseUrl: 'http://localhost:8001',
 	baseApiParams: {
 		secure: true
 	},
@@ -116,6 +117,17 @@ async function registerUser(user: User) {
 	isLoggedIn.set(true);
 }
 
+async function signOutCustom() : Promise<void> {
+	const auth = getAuth(getFirebaseApp());
+
+	await signOut(auth);
+
+
+	userData.set(null);
+	isLoggedIn.set(false);
+	api.setSecurityData(null);
+}
+
 export const UserStore = {
 	api: api.api,
 	userData: readonly(userData),
@@ -123,5 +135,6 @@ export const UserStore = {
 
 	login: login,
 	signUp: singUp,
+	singOut: signOutCustom,
 	initialize: initialize
 };

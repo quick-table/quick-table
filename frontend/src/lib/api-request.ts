@@ -88,9 +88,6 @@ export interface Reservation {
 	/** @format int32 */
 	id?: number;
 	status?: 'ACTIVE' | 'CANCELLED';
-	restaurant?: Restaurant;
-	timeSlot?: TimeSlot;
-	user?: User;
 }
 
 export interface ResponseWrapperUser {
@@ -174,11 +171,11 @@ export interface Restaurant {
 	name?: string;
 	email?: string;
 	owner?: User;
+	description?: string;
 	logoUrl?: string;
-	/** @uniqueItems true */
 	restaurantTables?: RestaurantTable[];
-	/** @uniqueItems true */
 	reservations?: Reservation[];
+	timeSlots?: TimeSlot[];
 }
 
 export interface RestaurantTable {
@@ -187,7 +184,6 @@ export interface RestaurantTable {
 	name?: string;
 	/** @format int32 */
 	capacity?: number;
-	restaurant?: Restaurant;
 }
 
 export interface TimeSlot {
@@ -197,9 +193,6 @@ export interface TimeSlot {
 	startDate?: string;
 	/** @format date-time */
 	endDate?: string;
-	table?: RestaurantTable;
-	reservation?: Reservation[];
-	restaurant?: Restaurant;
 	active?: boolean;
 	available?: boolean;
 }

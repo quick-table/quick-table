@@ -3,6 +3,7 @@
 	import { UserStore } from '../../stores/user-store';
 	import { useQuery, useQueryClient } from '@sveltestack/svelte-query';
 	import { extractResponse } from '../../lib/utils';
+	import snarkdown from 'snarkdown';
 
 	const queryClient = useQueryClient();
 
@@ -30,22 +31,32 @@
 
 	<div class="flex justify-center">
 		<nav class="list-nav max-w-fit">
-			<ul class="border-solid border-secondary-200">
+			<ul class="border-solid border-secondary-200 flex flex-col gap-4">
 				{#if $restaurants.data == undefined}
 					<div>Loading ....</div>
 				{:else}
 					{#each $restaurants.data as restaurant}
-						<li
-							class="m-1 py-8 sm:px-24 md:px-32 lg:px-48 border-2 border-solid flex items-center hover:bg-surface-200-700-token"
-						>
-							<span class="badge w-16 h-16 mr-4 sm:w-20 sm:h-20 relative md:right-1/2 lg:right-3/4">
-								<img src="static\favicon.png" alt="icon" class="w-full h-full" />
-							</span>
-							<span class="text-lg sm:text-xl">{restaurant.name}</span>
+						<li class="m-1 grid-cols-5 gap-8 grid">
+							<a
+								href={`/Restaurant?id=${restaurant.id}`}
+								class="col-span-2 rounded-md block object-cover w-full h-full"
+							>
+								<img src={restaurant.logoUrl} alt="icon" class="object-cover w-full h-full" />
+							</a>
+							<div class="col-span-3 py-2">
+								<h1 class="text-lg sm:text-xl font-bold">{restaurant.name}</h1>
+								<div>
+									{@html snarkdown(restaurant.description?.slice(1, 200) ?? '')}
+								</div>
+							</div>
 						</li>
 					{/each}
 				{/if}
 			</ul>
 		</nav>
+	</div>
+
+	<div class=" my-16 flex">
+		<span class="block m-auto text-5xl"> 😊 😋</span>
 	</div>
 </div>

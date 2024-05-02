@@ -1,30 +1,48 @@
-<main>
-    <!-- <nav class="flex justify-between bg-gray-900 sm:px-1 sm:py-2 md:px-2 lg:px-3 xl:px-4">
-        <a href="/" class="btn variant-filled-secondary custom-button md:px-3 md:py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-3">Home</a>
-        <a href="/Search" class="btn variant-filled-secondary custom-button md:px-3 md:py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-3">Search</a>
-        <a href="Reservations" class="btn variant-filled-secondary custom-button md:px-3 md:py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-3">Reservations</a>
-        <a href="/Login" class="btn variant-filled-secondary custom-button md:px-3 md:py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-3">Log in</a>
-        <a href = "/Signup" class="btn variant-filled-secondary custom-button md:px-3 md:py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-3">Sign up</a>
-      </nav> -->
-</main>
+<script lang="ts">
+	import { UserStore } from '../../stores/user-store';
+	import { onMount } from 'svelte';
+	import { Avatar, getToastStore } from '@skeletonlabs/skeleton';
+	import { popup } from '@skeletonlabs/skeleton';
+	import type { PopupSettings } from '@skeletonlabs/skeleton';
 
-<style>
-    nav{
-        position:fixed;
-        width: 100%;
-        z-index: 10;
-    }
-    
-    .custom-button {
-      /* Base styles */
-      padding: 0.5rem 0.75rem;
-      border: 2px solid;
-      border-color: rgb(203, 203, 126);
-      width: 20%;
-      text-align: center;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-evenly;
-      z-index: 10;
-    }
-  </style>
+	const toastStore = getToastStore();
+	$: userData = UserStore.userData;
+
+	const popupFeatured: PopupSettings = {
+		event: 'click',
+		placement: 'bottom',
+		target: 'popupFeatured'
+	};
+
+	async function logOut(): Promise<void> {
+		await UserStore.singOut();
+		toastStore.trigger({
+			message: "I see that's the way it is ...",
+		});
+	}
+</script>
+
+<!-- Placeholder to occupy the space of the nav bar when the page is scrolled fully up -->
+<div class=" h-16"></div>
+
+<nav
+	class="top-0 fixed w-full flex h-16 justify-center shadow-md bg-surface-50-900-token dark:shadow-black/20 dark:bg-surface-900"
+>
+	<div class="flex justify-between w-full max-w-screen-lg">
+		<a href="/" class="block">
+			<img src="/logo.svg" alt="icon" class="w-14 h-14" />
+		</a>
+
+		<button class="flex items-center scale-75" use:popup={popupFeatured}>
+			<Avatar initials={$userData?.user.email?.slice(0, 2)} />
+		</button>
+
+		<div class="card p-4 shadow-xl" data-popup="popupFeatured">
+			<button on:click={logOut} type="button" class="btn rounded-md bg-error-900 variant-filled">
+				Logout 😭
+			</button>
+		</div>
+	</div>
+
+	<div></div>
+</nav>

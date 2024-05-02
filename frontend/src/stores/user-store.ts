@@ -32,7 +32,7 @@ const isLoggedIn = writable(false);
 const userData = writable<UserData | null>(null);
 
 const api = new Api<SecurityData>({
-	baseUrl: 'http://localhost:8001',
+	baseUrl: 'http://ec2-52-201-242-246.compute-1.amazonaws.com:8001',
 	baseApiParams: {
 		secure: true
 	},

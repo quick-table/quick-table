@@ -1,12 +1,15 @@
 <script>
-	import { useQuery } from '@sveltestack/svelte-query';
+	import { onMount } from 'svelte';
 	import { UserStore } from '../../stores/user-store';
+	import { useQuery, useQueryClient } from '@sveltestack/svelte-query';
+	import { extractResponse } from '../../lib/utils';
 
-	$: isLoggedIn = UserStore.isLoggedIn;
+	const queryClient = useQueryClient();
+
 	$: userData = UserStore.userData;
 
-	var restaurant = useQuery(['restaurant', {}], async () => {
-		if (!$isLoggedIn) {
+	$: restaurants = useQuery(['restaurant', $userData?.id], async () => {
+		if (!$userData?.id) {
 			console.log('User is not logged in');
 			return;
 		}
@@ -15,26 +18,8 @@
 			restaurantName: ''
 		});
 
-		response.data = await response.json();
-
-		return response.data.data;
+		return await extractResponse(response);
 	});
-
-	var reservationQuery = useQuery(['restaurant', $userData?.id], async () => {
-		if (!$userData) {
-			console.log('User is not logged in');
-			return;
-		}
-
-		var response = await UserStore.api.getReservation($userData.id);
-
-		response.data = await response.json();
-
-		return response.data.data;
-	});
-
-	$: console.log($restaurant.data);
-	$: console.log($isLoggedIn);
 </script>
 
 <div class="min-h-screen">
@@ -46,18 +31,10 @@
 	<div class="flex justify-center">
 		<nav class="list-nav max-w-fit">
 			<ul class="border-solid border-secondary-200">
-				{#if $reservationQuery.data == undefined}
-					<div>Loading...</div>
-				{:else}
-					<div>
-						{JSON.stringify($reservationQuery.data)}
-					</div>
-				{/if}
-
-				{#if $restaurant.data == undefined}
+				{#if $restaurants.data == undefined}
 					<div>Loading ....</div>
 				{:else}
-					{#each $restaurant.data as restaurant}
+					{#each $restaurants.data as restaurant}
 						<li
 							class="m-1 py-8 sm:px-24 md:px-32 lg:px-48 border-2 border-solid flex items-center hover:bg-surface-200-700-token"
 						>

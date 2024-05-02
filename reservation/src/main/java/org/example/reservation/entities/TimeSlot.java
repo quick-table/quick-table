@@ -1,5 +1,6 @@
 package org.example.reservation.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -32,11 +33,14 @@ public class TimeSlot {
     private boolean isActive;
 
     @ManyToOne
+    @JsonIgnore
     private RestaurantTable table;
 
     @OneToMany(mappedBy = "timeSlot", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Reservation> reservation;
 
     @ManyToOne
+    @JsonIgnore
     private Restaurant restaurant;
 }

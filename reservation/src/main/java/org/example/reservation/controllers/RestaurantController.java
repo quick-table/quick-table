@@ -18,6 +18,13 @@ public class RestaurantController extends BaseController {
         this.restaurantService = restaurantService;
     }
 
+
+    @GetMapping("{id}")
+    public ResponseWrapper<Restaurant> getRestaurant(@PathVariable int id) {
+        return ok(restaurantService.getRestaurantById(id));
+    }
+
+
     @PostMapping("query")
     public ResponseWrapper<List<Restaurant>> searchRestaurant(@RequestBody SearchRestaurantDto searchRestaurantDto) {
         return ok(restaurantService.searchRestaurant(searchRestaurantDto));

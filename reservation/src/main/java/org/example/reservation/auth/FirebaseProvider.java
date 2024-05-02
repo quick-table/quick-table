@@ -12,9 +12,9 @@ import java.io.IOException;
 public class FirebaseProvider {
     private FirebaseProvider(){}
 
-    public static void initialize() {
+    public static void initialize(String privateKeyPath) {
         try {
-            var file = ResourceUtils.getFile("classpath:firebase-private-key.secret.json");
+            var file = ResourceUtils.getFile(privateKeyPath);
 
             var options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(new FileInputStream(file)))

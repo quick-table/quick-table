@@ -19,10 +19,10 @@ public class FirebaseAuthentication extends UserClaims implements Authentication
 
     private final HashSet<GrantedAuthority> authorities = new HashSet<>();
 
-    public boolean isIn(String group) {
+    public boolean isNotIn(String group) {
         return authorities
                 .stream()
-                .anyMatch(x -> x.getAuthority().equals(group));
+                .noneMatch(x -> x.getAuthority().equals(group));
     }
 
     public FirebaseAuthentication(FirebaseToken token) {

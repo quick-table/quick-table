@@ -13,7 +13,7 @@ class AuthenticationTest {
 
     @Test
     void authenticateShouldWork() throws IOException, FirebaseAuthException {
-        FirebaseProvider.initialize();
+        FirebaseProvider.initialize("classpath:firebase-private-key.secret.json");
 
         var userRoles = new String[]{
                 UserClaims.ROLE_USER,

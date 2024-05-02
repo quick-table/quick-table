@@ -3,6 +3,7 @@ package org.example.reservation.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,8 +23,11 @@ public class Restaurant {
     private String logoUrl;
 
     @OneToMany(mappedBy = "restaurant")
-    private Set<RestaurantTable> restaurantTables;
+    private List<RestaurantTable> restaurantTables;
 
     @OneToMany(mappedBy = "restaurant")
-    private Set<Reservation> reservations;
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<TimeSlot> timeSlots;
 }

@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.apache.commons.io.FileUtils;
 import java.io.File;
 
-public class Search {
+public class SignOut {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
@@ -27,15 +27,18 @@ public class Search {
   }
 
   @Test
-  public void testSearch() throws Exception {
+  public void testSignOut() throws Exception {
     driver.get("http://ec2-52-201-242-246.compute-1.amazonaws.com:8001/");
     driver.findElement(By.linkText("Login")).click();
     driver.findElement(By.id("signupEmail")).click();
     driver.findElement(By.id("signupEmail")).clear();
     driver.findElement(By.id("signupEmail")).sendKeys("kodohdaniel@gmail.com");
+    driver.findElement(By.id("password")).click();
     driver.findElement(By.id("password")).clear();
     driver.findElement(By.id("password")).sendKeys("Abc12345!");
     driver.findElement(By.xpath("//input[@value='Login']")).click();
+    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='✕'])[1]/following::*[name()='svg'][1]")).click();
+    driver.findElement(By.xpath("//button[@type='button']")).click();
   }
 
   @After

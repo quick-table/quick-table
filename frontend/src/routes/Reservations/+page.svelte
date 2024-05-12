@@ -1,51 +1,47 @@
-<script>
+<script lang="ts">
+	import { useQuery } from '@sveltestack/svelte-query';
+	import { UserStore } from '../../stores/user-store';
+	import { dateToString } from '$lib/utils';
 
-import { useQuery } from '@sveltestack/svelte-query';
-import { UserStore } from '../../stores/user-store';
+	$: isLoggedIn = UserStore.isLoggedIn;
+	$: userData = UserStore.userData;
 
-$: isLoggedIn = UserStore.isLoggedIn;
-$: userData = UserStore.userData;
+	$: reservations = useQuery(['reservations', $userData?.id], async () => {
+		if (!$isLoggedIn || !$userData) {
+			console.log('User is not logged in');
+			return;
+		}
 
-var reservation = useQuery(['reservations', $userData?.id], async () => {
-	if (!$isLoggedIn || !$userData) {
-		console.log('User is not logged in');
-		return;
-	}
+		var response = await UserStore.api.getReservation($userData.id);
 
-	var response = await UserStore.api.getReservation($userData.id);
-
-	if (response) {
-		response.data = await response.json();
-		return response.data.data;
-	} else {
-		console.log('Failed to fetch reservations: $userData is null');
-	}
-});
-
-    $: console.log($reservation);
-	$: console.log($isLoggedIn);
+		if (response) {
+			response.data = await response.json();
+			return response.data.data!;
+		} else {
+			console.log('Failed to fetch reservations: $userData is null');
+			return [];
+		}
+	});
 </script>
 
-<main style="background-color: #bae8cb">
-	<br>
-	<body>
-		<div class="min-h-screen bg-primary-300">
-			<h1 class="h1 font-bold mt-20 p-15 text-gray-950 align-middle origin-center text-center">Your Reservations</h1>
+<div class="mt-4 flex flex-col gap-4">
+	{#if $reservations.data}
+		{#each $reservations.data as reservation}
+			<div class="m-1 grid-cols-5 h-32 rounded-lg gap-8 grid">
+				{#if reservation.status === 'ACTIVE'}
+					<div class="col-span-1 bg-green-300 rounded-md"></div>
+				{:else}
+					<div class="col-span-1 bg-red-300 rounded-md"></div>
+				{/if}
 
-			<div class="flex justify-center">
-				<nav class="list-nav max-w-fit mt-24">
-					<ul class="border-solid border-secondary-200">
-						<li class="m-1 py-8 sm:px-24 md:px-32 lg:px-48 border-4 border-solid border-secondary-300 flex items-center hover:bg-primary-400">
-							<span class="badge bg-primary-400 w-16 h-16 mr-4 sm:w-20 sm:h-20 relative md:right-1/2 lg:right-3/4">
-								<img src="favicon.png" alt="icon" class="w-full h-full">
-							</span>
-							<span class="text-lg sm:text-xl">{reservation}</span>
-						</li>
-					</ul>
-				</nav>
+				<div class="col-span-3">
+					<p>Party Size: {reservation.timeSlot?.table?.capacity}</p>
+					<p>Start Date : {dateToString(new Date(reservation.timeSlot?.startDate ?? ''))}</p>
+					<p>End Date: {dateToString(new Date(reservation.timeSlot?.startDate ?? ''))}</p>
+
+					<p>Status : {reservation.status}</p>
+				</div>
 			</div>
-		</div>
-	</body>
-
-</main>
-
+		{/each}
+	{/if}
+</div>

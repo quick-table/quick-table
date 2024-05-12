@@ -4,12 +4,16 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { UserStore } from '../stores/user-store';
-	import { storePopup } from '@skeletonlabs/skeleton';
+	import DrawerContent from '$lib/DrawerContent.svelte';
+
+	import { getDrawerStore, storePopup } from '@skeletonlabs/skeleton';
 	import LoggedInNavbar from '$lib/navbar/logged-in-navbar.svelte';
-	import { initializeStores, Toast } from '@skeletonlabs/skeleton';
+	import { initializeStores, Toast, Drawer } from '@skeletonlabs/skeleton';
 	import LoggedOutNavbar from '$lib/navbar/logged-out-navbar.svelte';
 	import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
+
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+	import type { DisplayConfig } from '$lib/utils';
 
 	// Create a client
 	let showNavBar = true;
@@ -23,6 +27,7 @@
 	}
 
 	initializeStores();
+	const drawerStore = getDrawerStore();
 
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
@@ -32,11 +37,16 @@
 
 		UserStore.initialize();
 	});
+
+	$: config = $drawerStore as DisplayConfig;
 </script>
 
-<Toast />
-
 <QueryClientProvider client={queryClient}>
+	<Toast />
+	<Drawer>
+		<DrawerContent {config}></DrawerContent>
+	</Drawer>
+
 	{#if showNavBar}
 		{#if $userData}
 			<LoggedInNavbar />

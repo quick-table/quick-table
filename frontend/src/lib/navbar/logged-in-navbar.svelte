@@ -17,7 +17,7 @@
 	async function logOut(): Promise<void> {
 		await UserStore.singOut();
 		toastStore.trigger({
-			message: "I see that's the way it is ...",
+			message: "I see that's the way it is ..."
 		});
 	}
 </script>
@@ -38,9 +38,14 @@
 		</button>
 
 		<div class="card p-4 shadow-xl" data-popup="popupFeatured">
-			<button on:click={logOut} type="button" class="btn rounded-md bg-error-900 variant-filled">
-				Logout 😭
-			</button>
+			<div class="flex flex-col gap-4">
+				<a href="/Reservations" class="btn block rounded-md bg-surface-400 text-surface-900 font-bold variant-filled">
+					My Reservation
+				</a>
+				<button on:click={logOut} type="button" class="btn rounded-md bg-error-900 variant-filled">
+					Logout 😭
+				</button>
+			</div>
 		</div>
 	</div>
 

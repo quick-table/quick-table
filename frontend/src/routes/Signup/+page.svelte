@@ -62,7 +62,10 @@
 		<h1 class="my-8 text-4xl font-bold">Sign Up to QuickTable!</h1>
 		<form
 			class="mt-16 flex flex-col gap-4"
-			on:submit={() => $signupMutation.mutateAsync(userCredentials)}
+			on:submit={(event) => {
+				event.preventDefault();
+				$signupMutation.mutateAsync(userCredentials);
+			}}
 		>
 			<label for="signupEmail" class="label font-bold">
 				<span class="pl-2">Email </span>

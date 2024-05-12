@@ -19,7 +19,6 @@ public class Reservation {
     private Restaurant restaurant;
 
     @ManyToOne
-    @JsonIgnore
     private TimeSlot timeSlot;
 
     @ManyToOne

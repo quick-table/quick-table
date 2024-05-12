@@ -1,5 +1,6 @@
 package org.example.reservation.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,6 +32,7 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Reservation> reservations;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant")
     private List<TimeSlot> timeSlots;
 }

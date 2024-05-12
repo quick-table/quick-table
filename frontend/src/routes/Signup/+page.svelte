@@ -6,11 +6,15 @@
 	import { createUserForm } from './schema';
 	import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 	import { useMutation } from '@sveltestack/svelte-query';
+	import { sleep } from '$lib/utils';
+	import { goto } from '$app/navigation';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 
 	export const meta = {
 		title: 'Sign-up Page'
 	};
 
+	const toastStore = getToastStore();
 	let errors: ZodError<CreateUserForm> | undefined = undefined;
 
 	const userCredentials: CreateUserForm = {
@@ -27,10 +31,23 @@
 			return;
 		}
 
-		UserStore.signUp({
-			email: userCredentials.email,
-			password: userCredentials.password
+		try {
+			await UserStore.signUp({
+				email: userCredentials.email,
+				password: userCredentials.password
+			});
+		} catch {
+			toastStore.trigger({
+				message: 'The Lord Failed You'
+			});
+		}
+
+		toastStore.trigger({
+			message: 'Our Lords Grant You Permission 🎉👏'
 		});
+
+		await sleep(2000);
+		await goto('/');
 	});
 </script>
 

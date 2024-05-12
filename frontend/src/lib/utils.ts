@@ -1,4 +1,5 @@
-import type { HttpResponse } from './api-request';
+import type { DrawerSettings } from '@skeletonlabs/skeleton';
+import type { HttpResponse, Restaurant } from './api-request';
 
 type ResponsWrapper<T> = {
 	data?: T;
@@ -15,3 +16,21 @@ export async function extractResponse<T>(
 export function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function pad(number: number): string {
+	return number.toString().padStart(2, '0');
+}
+export function dateToString(date: Date): string {
+	return `${pad(date.getFullYear())}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+export function time(input: string): number {
+	const value = Date.parse('05/02/2024 ' + input);
+	return value;
+}
+
+export type DisplayConfig = DrawerSettings & {
+	meta?: {
+		RestaurantAvailability?: Restaurant;
+	};
+};

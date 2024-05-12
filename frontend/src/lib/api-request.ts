@@ -88,6 +88,7 @@ export interface Reservation {
 	/** @format int32 */
 	id?: number;
 	status?: 'ACTIVE' | 'CANCELLED';
+	timeSlot?: TimeSlot;
 }
 
 export interface ResponseWrapperUser {
@@ -175,7 +176,6 @@ export interface Restaurant {
 	logoUrl?: string;
 	restaurantTables?: RestaurantTable[];
 	reservations?: Reservation[];
-	timeSlots?: TimeSlot[];
 }
 
 export interface RestaurantTable {
@@ -193,6 +193,7 @@ export interface TimeSlot {
 	startDate?: string;
 	/** @format date-time */
 	endDate?: string;
+	table?: RestaurantTable;
 	active?: boolean;
 	available?: boolean;
 }
